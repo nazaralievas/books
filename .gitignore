@@ -1,0 +1,6 @@
+venv/
+*.env
+keys.py
+db.sqlite3
+.vscode/
+__pycache__/
