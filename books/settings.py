@@ -31,8 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_filters',
+    'social_django',
+
     'store',
-    # 'django-filters',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +82,10 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -130,3 +136,8 @@ REST_FRAMEWORK = {
     'rest_framework.parsers.JSONParser',
     )
 }
+
+SOCIAL_AUTH_POSTGRES_JSONFIELD_ENABLED = True
+
+SOCIAL_AUTH_GITHUB_KEY = env("GITHUB_CLIENT_ID")
+SOCIAL_AUTH_GITHUB_SECRET = env("GITHUB_CLIENT_SECRET")
