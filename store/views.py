@@ -6,12 +6,12 @@ from django.shortcuts import render
 
 from .models import Book
 from .serializers import BooksSerializer
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrStaffOrReadOnly
 
 
 class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrStaffOrReadOnly]
     serializer_class = BooksSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['price']
