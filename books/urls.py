@@ -3,10 +3,11 @@ from django.urls import path, include
 from django.urls import re_path as  url
 from rest_framework.routers import SimpleRouter
 
-from store.views import BookViewSet, auth
+from store.views import BookViewSet, UserBookRelationView ,auth
 
 router = SimpleRouter()
 router.register(r'book', BookViewSet)
+router.register(r'book_relation', UserBookRelationView, basename='user-book-relation')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
