@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.viewsets import GenericViewSet
-from django.db.models import Count, Case, When
+from django.db.models import Count, Case, When, Avg
 
 from .models import Book, UserBookRelation
 from .serializers import BooksSerializer, UserBookRelationSerializer
@@ -15,7 +15,8 @@ from .permissions import IsOwnerOrStaffOrReadOnly
 
 class BookViewSet(ModelViewSet):
     queryset = Book.objects.all().annotate(
-        annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))))
+        annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
+        rating=Avg('userbookrelation__rate'))
     permission_classes = [IsOwnerOrStaffOrReadOnly]
     serializer_class = BooksSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
