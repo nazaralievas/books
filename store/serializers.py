@@ -6,6 +6,7 @@ from .models import Book, UserBookRelation
 
 class BooksSerializer(ModelSerializer):
     likes_count = SerializerMethodField()
+    annotated_likes = IntegerField(read_only=True)
 
     class Meta:
         model = Book
