@@ -31,7 +31,6 @@ class BookSerializerTestCase(TestCase):
                 'name': 'Test Book 1',
                 'price': '100.00',
                 'author_name': 'Author 1',
-                'likes_count': 2,
                 'annotated_likes': 2,
                 'rating': '5.00'
             },
@@ -40,7 +39,6 @@ class BookSerializerTestCase(TestCase):
                 'name': 'Test Book 2',
                 'price': '200.00',
                 'author_name': 'Author 2',
-                'likes_count': 0,
                 'annotated_likes': 0,
                 'rating': '4.00'
             }

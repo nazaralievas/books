@@ -17,8 +17,7 @@ class BookApiTestCase(APITestCase):
         self.book_1 = Book.objects.create(name='Test Book 1', price=25, author_name='Author 1', owner=self.user)
         self.book_2 = Book.objects.create(name='Test Book 2', price=55, author_name='Author 5')
         self.book_3 = Book.objects.create(name='Test Book Author 1', price=55, author_name='Author 2')
-        UserBookRelation.objects.create(user=self.user, book=self.book_2, like=True, rate=5)
-
+        UserBookRelation.objects.create(user=self.user, book=self.book_1, like=True, rate=5)
 
 
     def test_get(self):
@@ -26,12 +25,11 @@ class BookApiTestCase(APITestCase):
         response = self.client.get(url)
         books = Book.objects.all().annotate(
             annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
-            rating=Avg('userbookrelation__rate'))
+            rating=Avg('userbookrelation__rate')).order_by('id')
         serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
         self.assertEqual(serializer_data[0]['rating'], '5.00')
-        self.assertEqual(serializer_data[0]['likes_count'], 1)
         self.assertEqual(serializer_data[0]['annotated_likes'], 1)
 
     
@@ -40,7 +38,7 @@ class BookApiTestCase(APITestCase):
         url = reverse('book-list')
         books = Book.objects.filter(id__in=[self.book_2.id, self.book_3.id]).annotate(
             annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
-            rating=Avg('userbookrelation__rate'))
+            rating=Avg('userbookrelation__rate')).order_by('id')
         response = self.client.get(url, data={'price': 55})
         serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(status.HTTP_200_OK, response.status_code)
