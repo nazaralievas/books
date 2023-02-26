@@ -1,12 +1,18 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import SerializerMethodField, IntegerField
 
 from .models import Book, UserBookRelation
 
 
 class BooksSerializer(ModelSerializer):
+    likes_count = SerializerMethodField()
+
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ('id', 'name', 'price', 'author_name', 'likes_count', 'annotated_likes')
+    
+    def get_likes_count(self, instance):
+        return UserBookRelation.objects.filter(book=instance, like=True).count()
 
 
 class UserBookRelationSerializer(ModelSerializer):
