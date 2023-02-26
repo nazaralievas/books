@@ -8,11 +8,12 @@ from store.models import Book, UserBookRelation
 
 class BookSerializerTestCase(TestCase):
     def test_ok(self):
-        user1 = User.objects.create(username='user1')
-        user2 = User.objects.create(username='user2')
-        user3 = User.objects.create(username='user3')
+        user1 = User.objects.create(username='user1', first_name='Tom', last_name='TT')
+        user2 = User.objects.create(username='user2', first_name='Bill', last_name='BB')
+        user3 = User.objects.create(username='user3', first_name='John', last_name='JJ')
+
         book_1 = Book.objects.create(name='Test Book 1', price=100,
-                                     author_name='Author 1')
+                                     author_name='Author 1', owner=user1)
         book_2 = Book.objects.create(name='Test Book 2', price=200,
                                      author_name='Author 2')
 
@@ -32,7 +33,18 @@ class BookSerializerTestCase(TestCase):
                 'price': '100.00',
                 'author_name': 'Author 1',
                 'annotated_likes': 2,
-                'rating': '5.00'
+                'rating': '5.00',
+                'owner_name': 'user1',
+                'readers': [
+                    {
+                        'first_name': 'Tom',
+                        'last_name': 'TT'
+                    },
+                    {
+                        'first_name': 'Bill',
+                        'last_name': 'BB'
+                    }
+                ]
             },
             {
                 'id': book_2.id,
@@ -40,7 +52,14 @@ class BookSerializerTestCase(TestCase):
                 'price': '200.00',
                 'author_name': 'Author 2',
                 'annotated_likes': 0,
-                'rating': '4.00'
+                'rating': '4.00',
+                'owner_name': '',
+                'readers': [
+                    {
+                        'first_name': 'John',
+                        'last_name': 'JJ'
+                    }
+                ]
             }
         ]
         self.assertEqual(expected_data, data)

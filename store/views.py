@@ -16,7 +16,7 @@ from .permissions import IsOwnerOrStaffOrReadOnly
 class BookViewSet(ModelViewSet):
     queryset = Book.objects.all().annotate(
         annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
-        rating=Avg('userbookrelation__rate')).select_related('owner').order_by('id')
+        rating=Avg('userbookrelation__rate')).select_related('owner').prefetch_related('readers').order_by('id')
     permission_classes = [IsOwnerOrStaffOrReadOnly]
     serializer_class = BooksSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
